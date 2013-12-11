@@ -12,10 +12,15 @@ import hudson.model.Api;
 import hudson.model.Hudson;
 import hudson.model.RootAction;
 import hudson.model.User;
+
+import hudson.plugins.cigame.model.ScoreLevel;
+
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
 import hudson.util.VersionNumber;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -115,7 +120,54 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         }
     }
 
-    
+    public ACL getACL() {
+        return Hudson.getInstance().getACL();
+    }
+
+    public void checkPermission(Permission p) {
+        getACL().checkPermission(p);
+    }
+
+    public boolean hasPermission(Permission p) {
+        return getACL().hasPermission(p);
+    }
+
+    @Exported
+    public Map<ScoreLevel, List<UserScore>> getUserGroups() {
+        Map<ScoreLevel, List<UserScore>> result = new TreeMap<ScoreLevel, List<UserScore>>(new Comparator<ScoreLevel>() {
+            public int compare(ScoreLevel o1, ScoreLevel o2) {
+                return o2.getLevel() - o1.getLevel(); //descending
+            }
+        });
+
+        GameDescriptor gameDescriptor = Hudson.getInstance().getDescriptorByType(GameDescriptor.class);
+        List<UserScore> userScores = getUserScores(User.getAll(), gameDescriptor.getNamesAreCaseSensitive());
+        Map<Integer, ScoreLevel> levels = gameDescriptor.getScoreLevels();
+        for (UserScore userScore : userScores) {
+            if (userScore.getScore() < 10) {
+                addUserScoreToLevel(userScore, levels.get(1), result);
+            } else if (userScore.getScore() < 20) {
+                addUserScoreToLevel(userScore, levels.get(2), result);
+            } else if (userScore.getScore() < 30) {
+                addUserScoreToLevel(userScore, levels.get(3), result);
+            } else {
+                addUserScoreToLevel(userScore, levels.get(4), result);
+            }
+        }
+
+        return result;
+    }
+
+    private void addUserScoreToLevel(UserScore userScore, ScoreLevel level, Map<ScoreLevel, List<UserScore>> userScores) {
+        List<UserScore> scores = userScores.get(level);
+        if (scores == null) {
+            scores = new ArrayList<UserScore>();
+            userScores.put(level, scores);
+        }
+        scores.add(userScore);
+    }
+
+
     @ExportedBean(defaultVisibility = 999)
     public class UserScore {
         private User user;
@@ -143,18 +195,6 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         public String getDescription() {
             return description;
         }
-    }
-
-    public ACL getACL() {
-        return Hudson.getInstance().getACL();
-    }
-
-    public void checkPermission(Permission p) {
-        getACL().checkPermission(p);
-    }
-
-    public boolean hasPermission(Permission p) {
-        return getACL().hasPermission(p);
     }
 
     public Api getApi() {

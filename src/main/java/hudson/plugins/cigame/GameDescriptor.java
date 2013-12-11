@@ -8,6 +8,7 @@ import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
+import hudson.plugins.cigame.model.ScoreLevel;
 import hudson.plugins.cigame.rules.build.BuildRuleSet;
 import hudson.plugins.cigame.rules.plugins.checkstyle.CheckstyleRuleSet;
 import hudson.plugins.cigame.rules.plugins.findbugs.FindBugsRuleSet;
@@ -18,6 +19,8 @@ import hudson.plugins.cigame.rules.plugins.warnings.WarningsRuleSet;
 import hudson.plugins.cigame.rules.unittesting.UnitTestingRuleSet;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
+import java.util.HashMap;
+import java.util.Map;
 
 // Config page for the application (descriptor of the game plugin)
 @Extension
@@ -25,6 +28,7 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
   public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
   public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
+  private transient Map<Integer, ScoreLevel> scoreLevels;
 
   private boolean namesAreCaseSensitive = true;
 
@@ -87,6 +91,17 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
   public String getDisplayName() {
     return Messages.Plugin_Title();
   }
+
+    public Map<Integer, ScoreLevel> getScoreLevels(){
+        if (scoreLevels == null){
+            scoreLevels = new HashMap<Integer, ScoreLevel>();
+            scoreLevels.put(1, new ScoreLevel("Major", "", "plugin/ci-game/images/major.png", 1));
+            scoreLevels.put(2, new ScoreLevel("Colonel", "", "plugin/ci-game/images/colonel.png", 2));
+            scoreLevels.put(3, new ScoreLevel("General", "", "plugin/ci-game/images/general.png", 3));
+            scoreLevels.put(4, new ScoreLevel("Marshal", "", "plugin/ci-game/images/marshal.png", 4));
+        }
+        return scoreLevels;
+    }
 
   @Override
   public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
