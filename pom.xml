@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jenkins-ci.plugins</groupId>
-        <artifactId>plugin</artifactId>
-        <version>1.580.3</version>
-    </parent>
+  <parent>
+    <groupId>org.jenkins-ci.plugins</groupId>
+    <artifactId>plugin</artifactId>
+    <version>1.580.3</version>
+  </parent>
 
   <artifactId>ci-game</artifactId>
   <packaging>hpi</packaging>
@@ -29,8 +29,8 @@
 
   <licenses>
     <license>
-    <name>MIT license</name>
-    <comments>All source code is under the MIT license.</comments>
+      <name>MIT license</name>
+      <comments>All source code is under the MIT license.</comments>
     </license>
   </licenses>
 
@@ -42,10 +42,10 @@
       <timezone>+1</timezone>
     </developer>
     <developer>
-        <id>kutzi</id>
-        <name>Christoph Kutzinski</name>
-        <email>kutzi@gmx.de</email>
-        <timezone>1</timezone>
+      <id>kutzi</id>
+      <name>Christoph Kutzinski</name>
+      <email>kutzi@gmx.de</email>
+      <timezone>1</timezone>
     </developer>
   </developers>
   
@@ -55,20 +55,24 @@
   
   <build>
     <pluginManagement>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.5</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.3.1</version>
-            </plugin>
-        </plugins>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.1</version>
+          <configuration>
+            <source>1.7</source>
+            <target>1.7</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.7</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+      </plugins>
     </pluginManagement>
     <plugins>
       <plugin>
@@ -79,23 +83,26 @@
         </configuration>
       </plugin>
     </plugins>
-  </build>
-  
+  </build>  
 
   <dependencies>
-
-      <dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.2.4</version>
+    </dependency>
+    <dependency>
       <groupId>org.jenkins-ci.main</groupId>
       <artifactId>jenkins-test-harness</artifactId>
       <version>${project.parent.version}</version>
       <scope>test</scope>
     </dependency>
-	  <dependency>
-		  <groupId>org.apache.ant</groupId>
-		  <artifactId>ant</artifactId>
-		  <version>1.8.3</version>
-		  <scope>test</scope>
-	  </dependency>
+    <dependency>
+      <groupId>org.apache.ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.8.3</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>checkstyle</artifactId>
@@ -148,12 +155,12 @@
       <artifactId>mockito-core</artifactId>
       <version>1.8.5</version>
       <scope>test</scope>
-	  <exclusions>
-		<exclusion>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>
-		</exclusion>
-	  </exclusions>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -161,7 +168,7 @@
       <version>1.2.1</version>
       <scope>test</scope>
     </dependency>
-	<dependency>
+    <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>junit</artifactId>
       <version>1.0</version>
@@ -169,19 +176,19 @@
   </dependencies>
 
 
-    <repositories>
-        <repository>
-            <id>repo.jenkins-ci.org</id>
-            <url>http://repo.jenkins-ci.org/public/</url>
-        </repository>
-    </repositories>
+  <repositories>
+    <repository>
+      <id>repo.jenkins-ci.org</id>
+      <url>http://repo.jenkins-ci.org/public/</url>
+    </repository>
+  </repositories>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>repo.jenkins-ci.org</id>
-            <url>http://repo.jenkins-ci.org/public/</url>
-        </pluginRepository>
-    </pluginRepositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.jenkins-ci.org</id>
+      <url>http://repo.jenkins-ci.org/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>  
   
 

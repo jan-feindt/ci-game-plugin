@@ -16,10 +16,14 @@
                         <tr>
                             <j:forEach var="userGroup" items="${it.getUserGroups().keySet()}">
                                 <td class="pane-header" align="left">
-                                    <img src="${rootURL}/${userGroup.imageUrl}"
-                                         alt="${userGroup.name} icon"
-                                         style="margin: 2px; vertical-align: middle;"/>
-                                    <b style="font-size: 20px;">${userGroup.name}</b>
+                                    <div style="display: table;">
+                                        <img src="${userGroup.imageUrl}"
+                                             alt="${userGroup.name} icon"/>
+                                        <div style="display: table-cell; vertical-align: middle;padding: 5px;">
+                                            <b style="font-size: 20px;">${userGroup.name}</b>
+                                            <p>${userGroup.description}</p>
+                                        </div>
+                                    </div>
                                 </td>
                             </j:forEach>
                         </tr>

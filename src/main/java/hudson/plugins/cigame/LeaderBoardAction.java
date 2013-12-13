@@ -134,25 +134,22 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
 
     @Exported
     public Map<ScoreLevel, List<UserScore>> getUserGroups() {
-        Map<ScoreLevel, List<UserScore>> result = new TreeMap<ScoreLevel, List<UserScore>>(new Comparator<ScoreLevel>() {
-            public int compare(ScoreLevel o1, ScoreLevel o2) {
-                return o2.getLevel() - o1.getLevel(); //descending
-            }
-        });
+        Map<ScoreLevel, List<UserScore>> result = new TreeMap<ScoreLevel, List<UserScore>>(new DescendingScoreLevelComparator());
 
         GameDescriptor gameDescriptor = Hudson.getInstance().getDescriptorByType(GameDescriptor.class);
         List<UserScore> userScores = getUserScores(User.getAll(), gameDescriptor.getNamesAreCaseSensitive());
-        Map<Integer, ScoreLevel> levels = gameDescriptor.getScoreLevels();
+        List<ScoreLevel> levels = gameDescriptor.getScoreLevels();
+
         for (UserScore userScore : userScores) {
-            if (userScore.getScore() < 10) {
-                addUserScoreToLevel(userScore, levels.get(1), result);
-            } else if (userScore.getScore() < 20) {
-                addUserScoreToLevel(userScore, levels.get(2), result);
-            } else if (userScore.getScore() < 30) {
-                addUserScoreToLevel(userScore, levels.get(3), result);
-            } else {
-                addUserScoreToLevel(userScore, levels.get(4), result);
+            ScoreLevel chosenLevel = null;
+            for (ScoreLevel level : levels) {
+                if (userScore.getScore() >= level.getMinScore() && userScore.getScore() < level.getMaxScore()) {
+                    chosenLevel = level;
+                    break;
+                }
             }
+
+            addUserScoreToLevel(userScore, chosenLevel, result);
         }
 
         return result;
@@ -167,6 +164,11 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         scores.add(userScore);
     }
 
+    private class DescendingScoreLevelComparator implements Comparator<ScoreLevel> {
+        public int compare(ScoreLevel o1, ScoreLevel o2) {
+            return o2.getLevel() - o1.getLevel();
+        }
+    }
 
     @ExportedBean(defaultVisibility = 999)
     public class UserScore {
