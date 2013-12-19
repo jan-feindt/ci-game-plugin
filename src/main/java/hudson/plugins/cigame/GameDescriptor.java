@@ -9,6 +9,7 @@ import org.kohsuke.stapler.StaplerRequest;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
+import hudson.model.User;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
 import hudson.plugins.cigame.model.ScoreLevel;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 
 // Config page for the application (descriptor of the game plugin)

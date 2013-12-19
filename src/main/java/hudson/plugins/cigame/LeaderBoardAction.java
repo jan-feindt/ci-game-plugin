@@ -233,8 +233,22 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
 
   private class DescendingScoreLevelComparator implements Comparator<ScoreLevel> {
 
-    public int compare(ScoreLevel o1, ScoreLevel o2) {
-      return o2.getLevel() - o1.getLevel();
+        Collection<User> users = User.getAll();
+
+        for (UserScoreProperty scoreProperty : list) {
+            for (User user : users) {
+                if (user.getId().equals(scoreProperty.getUserId())) {
+                    UserScoreProperty property = user.getProperty(UserScoreProperty.class);
+                    if (property == null) {
+                        user.addProperty(scoreProperty);
+                    } else {
+                        property.setScore(scoreProperty.getScore());
+                        property.setNotParticipatingInGame(!scoreProperty.isParticipatingInGame());
+                    }
+                    user.save();
+                }
+            }
+        }
     }
   }
 

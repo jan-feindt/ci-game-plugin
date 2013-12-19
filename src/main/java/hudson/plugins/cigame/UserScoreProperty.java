@@ -33,8 +33,7 @@ public class UserScoreProperty extends UserProperty {
      * has doesnt have the value.
      */
     private boolean isNotParticipatingInGame;
-
-    private List<ScoreHistoryEntry> scoreHistoryEntries;
+    private transient List<ScoreHistoryEntry> scoreHistoryEntries;
 
     public UserScoreProperty() {
         score = 0;
