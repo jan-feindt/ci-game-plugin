@@ -9,8 +9,7 @@
                 <f:textbox name="game.score" value="${instance.score}" />
             </j:when>
             <j:otherwise>
-                <input type="hidden" name="game.score" value="${instance.score}"/>
-                ${instance.score}
+                <f:readOnlyTextbox name="game.score" value="${instance.score}"/>
             </j:otherwise>
         </j:choose>
     </f:entry>

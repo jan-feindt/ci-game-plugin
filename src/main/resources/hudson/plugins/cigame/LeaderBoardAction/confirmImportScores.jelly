@@ -1,0 +1,18 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout"
+         xmlns:f="/lib/form">
+    <l:layout title="">
+        <st:include page="sidepanel.jelly"/>
+        <l:main-panel>
+            <form method="post" action="importScores">
+                <div>
+                    <label for="jsonData">Score file</label>
+                    <input type="file" name="jsonData" jsonAware="yes"/>
+                </div>
+                <div>
+                    <f:submit value="Import scores"/>
+                </div>
+            </form>
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

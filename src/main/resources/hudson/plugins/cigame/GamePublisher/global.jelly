@@ -4,7 +4,10 @@
 		<f:entry title="${%cigame.namesarecasesensitive}" help="/plugin/ci-game/namesarecasesensitive.html">
 			<f:checkbox field="namesAreCaseSensitive" />
 		</f:entry>
-	    <f:advanced title="${%cigame.build.subtitle}">
+    <f:entry title="uploadNewFile" description="description.uploadNewFile">
+      <input type="file" name="configFile" jsonAware="yes"/>
+    </f:entry>
+	  <f:advanced title="${%cigame.build.subtitle}">
 			<f:entry title="${%cigame.build.subtitle}">
 				<table width="100%" style="border: 1px solid #aaa">
           <f:entry title="${%cigame.build.marksForSuccessfulBuildsByOne}" field="successfulBuildPoints">
@@ -39,6 +42,6 @@
 					</f:entry>
 				</table>
 			</f:entry>
-	    </f:advanced>
+	  </f:advanced>
 	</f:section>
 </j:jelly>

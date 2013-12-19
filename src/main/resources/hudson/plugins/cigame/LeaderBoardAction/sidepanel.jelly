@@ -1,11 +1,19 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:
-fmt">
-  <l:header />
-  <l:side-panel>
-    <l:tasks>
-      <l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back.To.Dashboard}" />
-      <l:task icon="images/24x24/edit-delete.gif" href="confirmResetScores" title="${%Leaderboard.ResetScoresAction}" permission="${app.ADMINISTER}"/>
-    </l:tasks>
-  </l:side-panel>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+    <l:header/>
+    <l:side-panel>
+        <l:tasks>
+            <l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back.To.Dashboard}"/>
+            <l:task icon="plugin/ci-game/icons/game-22x22.png" href="${rootURL}/ci-game/"
+                    title="${%Leaderboard.title}"/>
+            <l:task icon="plugin/ci-game/icons/24x24/export.png" href="exportScores"
+                    title="Export scores"/>
+            <l:hasPermission permission="${app.ADMINISTER}">
+                <l:task icon="plugin/ci-game/icons/24x24/import.png" href="confirmImportScores"
+                        title="Import scores"/>
+                <l:task icon="plugin/ci-game/icons/24x24/delete.png" href="confirmResetScores"
+                        title="${%Leaderboard.ResetScoresAction}"/>
+            </l:hasPermission>
+        </l:tasks>
+    </l:side-panel>
 </j:jelly>

@@ -21,8 +21,8 @@ public class LeaderBoardActionTest {
         UserScoreProperty property = new UserScoreProperty(2.0, true, null);
         when(userWithProperty.getProperty(UserScoreProperty.class)).thenReturn(property);
         when(userWithoutProperty.getProperty(UserScoreProperty.class)).thenReturn(null);
-        
-        new LeaderBoardAction().doResetScores(Arrays.asList(userWithoutProperty, userWithProperty));        
+
+        new LeaderBoardAction().resetScores(Arrays.asList(userWithoutProperty, userWithProperty));
         assertThat(property.getScore(), is(0d));
         
         verify(userWithoutProperty).getProperty(UserScoreProperty.class);

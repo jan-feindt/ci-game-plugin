@@ -1,8 +1,8 @@
 package hudson.plugins.cigame.rules.unittesting;
 
+import hudson.model.Hudson;
 import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
-import jenkins.model.Jenkins;
 
 /**
  * Rule that gives points for increasing the number of passed tests. By default 1 mark given.
@@ -16,8 +16,8 @@ public class IncreasingPassedTestsRule extends AbstractPassedTestsRule {
     private static final int DEFAULT_POINTS = 1;
 
     private int getPoints() {
-        GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
-        return gameDescriptor!=null?gameDescriptor.getPassedTestIncreasingPoints():DEFAULT_POINTS;
+        GameDescriptor gameDescriptor = Hudson.getInstance().getDescriptorByType(GameDescriptor.class);
+        return gameDescriptor != null ? gameDescriptor.getPassedTestIncreasingPoints() : DEFAULT_POINTS;
     }
     
     public String getName() {
