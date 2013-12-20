@@ -1,26 +1,82 @@
 [
     {
         "name": "Spy",
-        "description": "Initial level.",
-        "imageUrl": "/plugin/ci-game/stratego/1.spy.png",
+        "description": "Initial level (<10).",
+        "imageUrl": "/plugin/ci-game/stratego/1.Spy.png",
         "level": 1,
         "minScore": -100,
         "maxScore": 10
     },
     {
         "name": "Scout",
-        "description": "You need more.",
-        "imageUrl": "/plugin/ci-game/stratego/2.scout.png",
+        "description": "[10,20)",
+        "imageUrl": "/plugin/ci-game/stratego/2.Scout.png",
         "level": 2,
         "minScore": 10,
         "maxScore": 20
     },
     {
         "name": "Miner",
-        "description": "",
-        "imageUrl": "/plugin/ci-game/stratego/3.miner.png",
+        "description": "[20,40)",
+        "imageUrl": "/plugin/ci-game/stratego/3.Miner.png",
         "level": 3,
         "minScore": 20,
         "maxScore": 40
+    },
+    {
+        "name": "Sergeant",
+        "description": "[40,80)",
+        "imageUrl": "/plugin/ci-game/stratego/4.Sergeant.png",
+        "level": 4,
+        "minScore": 40,
+        "maxScore": 80
+    },
+    {
+        "name": "Lieutenant",
+        "description": "[80,160)",
+        "imageUrl": "/plugin/ci-game/stratego/5.Lieutenant.png",
+        "level": 5,
+        "minScore": 80,
+        "maxScore": 160
+    },
+    {
+        "name": "Captain",
+        "description": "[160,320)",
+        "imageUrl": "/plugin/ci-game/stratego/6.Captain.png",
+        "level": 6,
+        "minScore": 160,
+        "maxScore": 320
+    },
+    {
+        "name": "Major",
+        "description": "[320,640)",
+        "imageUrl": "/plugin/ci-game/stratego/7.Major.png",
+        "level": 7,
+        "minScore": 320,
+        "maxScore": 640
+    },
+    {
+        "name": "Colonel",
+        "description": "[640,1280)",
+        "imageUrl": "/plugin/ci-game/stratego/8.Colonel.png",
+        "level": 8,
+        "minScore": 640,
+        "maxScore": 1280
+    },
+    {
+        "name": "General",
+        "description": "[1280,2560)",
+        "imageUrl": "/plugin/ci-game/stratego/9.General.png",
+        "level": 9,
+        "minScore": 1280,
+        "maxScore": 2560
+    },
+    {
+        "name": "Marshall",
+        "description": "[2560,5120)",
+        "imageUrl": "/plugin/ci-game/stratego/10.Marshall.png",
+        "level": 10,
+        "minScore": 2560,
+        "maxScore": 5120
     }
 ]
