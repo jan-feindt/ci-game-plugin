@@ -1,7 +1,8 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson">
-    <t:summary icon="/plugin/ci-game/icons/game-48x48.png">
-        ${%Scorecard.Summary}<a href="${it.urlName}">${%Scorecard.Linktext(it.scorecard.totalPoints)}</a>
+    <t:summary icon="/plugin/ci-game/icons/48x48/game.png">
+        ${%Scorecard.Summary}
+        <a href="${it.urlName}">${%Scorecard.Linktext(it.scorecard.totalPoints)}</a>
         ${%Scorecard.Summary.postfix}
     </t:summary>
 </j:jelly>

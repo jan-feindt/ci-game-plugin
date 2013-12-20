@@ -2,9 +2,9 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson">
     <l:layout title="${%Leaderboard.title}">
-        <l:header>
-            <link rel="stylesheet" href="${rootURL}/plugin/ci-game/game.css" type="text/css" media="screen"/>
-        </l:header>
+        <!--<l:header>-->
+            <!--<link rel="stylesheet" href="${rootURL}/plugin/ci-game/game.css" type="text/css" media="screen"/>-->
+        <!--</l:header>-->
 
         <st:include page="sidepanel.jelly"/>
         <t:setIconSize/>

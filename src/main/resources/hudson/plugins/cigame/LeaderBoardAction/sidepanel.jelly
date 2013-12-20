@@ -4,7 +4,7 @@
     <l:side-panel>
         <l:tasks>
             <l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back.To.Dashboard}"/>
-            <l:task icon="plugin/ci-game/icons/game-22x22.png" href="${rootURL}/ci-game/"
+            <l:task icon="plugin/ci-game/icons/24x24/game.png" href="${rootURL}/ci-game/"
                     title="${%Leaderboard.title}"/>
             <l:task icon="plugin/ci-game/icons/24x24/export.png" href="exportScores"
                     title="Export scores"/>

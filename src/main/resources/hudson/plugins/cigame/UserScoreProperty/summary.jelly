@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns="http://www.w3.org/1999/xhtml" xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
     <j:if test="${it.isParticipatingInGame()}">
         <style type="text/css">
             .green-bg {
@@ -19,23 +19,56 @@
                 font-weight: lighter;
                 padding: 7px 14px;
             }
+
+            .verticalListItem {
+                display: block;
+                overflow: hidden
+            }
+
+            .verticalItemImage {
+                float: left;
+                margin-right: 7px;
+            }
+
+            .verticalItemImage img {
+                display: block;
+            }
         </style>
-        <h2><img src="${rootURL}/plugin/ci-game/icons/game-32x32.png"/><span style="padding-left: 1ex;"><st:out value="${%cigame.title}"/></span></h2>
-        <j:set var="scoreColor" value="${it.score &gt;= 0 ? 'green-bg' : (it.score &lt; 0 ? 'red-bg' : 'grey-bg')}" />
-        <div style="vertical-align: baseline;">
-            <span style="padding-right: 1em;"><st:out value="${%User.Score}"/></span>
-            <span class="current-score ${scoreColor}"><st:out value="${it.score}"/></span>
+        <h2>
+            <img src="${rootURL}/plugin/ci-game/icons/32x32/game.png" alt="ci-game icon"/>
+            <span style="padding-left: 1ex;">${%cigame.title}</span>
+        </h2>
+
+        <h3>You promoted to</h3>
+        <j:set var="scoreColor" value="${it.score &gt;= 0 ? 'green-bg' : (it.score &lt; 0 ? 'red-bg' : 'grey-bg')}"/>
+        <j:set var="scoreLevel" value="${it.getScoreLevel()}"/>
+        <div class="verticalListItem">
+            <div class="verticalItemImage">
+                <img src="${scoreLevel.getImageUrl()}" alt="${scoreLevel.getName()} icon"/>
+            </div>
+            <div class="verticalItemText">
+                <p>
+                    <b style="font-size:20px">${scoreLevel.getName()}</b>
+                </p>
+                <p>
+                    <span class="current-score ${scoreColor}">${it.score}</span>
+                </p>
+            </div>
         </div>
-        <h3><st:out value="${%User.MostRecentScores}"/></h3>
+
+        <br/>
+
+        <h3>${%User.MostRecentScores}</h3>
         <table class="pane sortable" style="width: 60%;" id="game.scores">
             <tr>
                 <td class="pane-header" style="text-align: right;">${%User.Score}</td>
                 <td class="pane-header" style="text-align: left;">${%User.ScoreSource}</td>
             </tr>
             <j:forEach var="scoreEntry" items="${it.mostRecentScores}">
-                <j:set var="scoreEntryColor" value="${scoreEntry.awardedScoreString.startsWith('+') ? 'green-bg' : (scoreEntry.awardedScoreString.startsWith('-') ? 'red-bg' : 'grey-bg')}" />
-                <tr class="${scoreEntryColor}" >
-                    <td style="text-align: right; padding: 4px;"><st:out value="${scoreEntry.awardedScoreString}"/></td>
+                <j:set var="scoreEntryColor"
+                       value="${scoreEntry.awardedScoreString.startsWith('+') ? 'green-bg' : (scoreEntry.awardedScoreString.startsWith('-') ? 'red-bg' : 'grey-bg')}"/>
+                <tr class="${scoreEntryColor}">
+                    <td style="text-align: right; padding: 4px;">${scoreEntry.awardedScoreString}"</td>
                     <td>
                         <j:forEach var="scoredJob" items="${scoreEntry.awardingRuns}">
                             <a href="${rootURL}/${scoredJob.url}cigame/">${scoredJob.fullDisplayName}</a>

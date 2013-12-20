@@ -6,10 +6,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import hudson.model.AbstractBuild;
 import hudson.plugins.cigame.model.ScoreHistoryEntry;
+import hudson.plugins.cigame.model.ScoreLevel;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
-
+import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.model.UserProperty;
 
@@ -59,6 +60,20 @@ public class UserScoreProperty extends UserProperty {
 
     public void setScore(double score) {
         this.score = score;
+    }
+
+    @Exported
+    public ScoreLevel getScoreLevel() {
+        GameDescriptor gameDescriptor = Hudson.getInstance().getDescriptorByType(GameDescriptor.class);
+        List<ScoreLevel> levels = gameDescriptor.getScoreLevels();
+
+        for (ScoreLevel level : levels) {
+            if (score >= level.getMinScore() && score < level.getMaxScore()) {
+                return level;
+            }
+        }
+
+        return null;
     }
 
     public String getUserId() {

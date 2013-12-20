@@ -41,6 +41,7 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
   public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
   public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
+  public static final String ACTION_LOGO_SMALL = "/plugin/ci-game/icons/24x24/game.png"; //$NON-NLS-1$
   private transient List<ScoreLevel> scoreLevels;
   private boolean namesAreCaseSensitive = true;
   private int passedTestIncreasingPoints = 1;
@@ -49,7 +50,7 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
   private int failedTestDecreasingPoints = 0;
   private int skippedTestIncreasingPoints = 0;
   private int skippedTestDecreasingPoints = 0;
-
+    
   private int successfulBuildPoints = 1;
   private int failedBuildPoints = -10;
 

@@ -1,26 +1,26 @@
 [
     {
-        "name":"Spy",
-        "description":"Initial level.",
-        "imageUrl":"/plugin/ci-game/stratego/1.spy.png",
-        "level":1,
-        "minScore":-100,
-        "maxScore":10
+        "name": "Spy",
+        "description": "Initial level.",
+        "imageUrl": "/plugin/ci-game/stratego/1.spy.png",
+        "level": 1,
+        "minScore": -100,
+        "maxScore": 10
     },
     {
-        "name":"Scout",
-        "description":"You need more.",
-        "imageUrl":"/plugin/ci-game/stratego/2.scout.png",
-        "level":2,
-        "minScore":10,
-        "maxScore":20
+        "name": "Scout",
+        "description": "You need more.",
+        "imageUrl": "/plugin/ci-game/stratego/2.scout.png",
+        "level": 2,
+        "minScore": 10,
+        "maxScore": 20
     },
     {
-        "name":"Miner",
-        "description":"",
-        "imageUrl":"/plugin/ci-game/stratego/3.miner.png",
-        "level":3,
-        "minScore":20,
-        "maxScore":40
+        "name": "Miner",
+        "description": "",
+        "imageUrl": "/plugin/ci-game/stratego/3.miner.png",
+        "level": 3,
+        "minScore": 20,
+        "maxScore": 40
     }
 ]
