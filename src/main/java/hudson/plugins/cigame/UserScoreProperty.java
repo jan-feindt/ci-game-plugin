@@ -60,6 +60,10 @@ public class UserScoreProperty extends UserProperty {
         this.score = score;
     }
 
+    public void setScoreHistoryEntries(List<ScoreHistoryEntry> scoreHistoryEntries) {
+        this.scoreHistoryEntries = scoreHistoryEntries != null ? Lists.newLinkedList(scoreHistoryEntries) : null;
+    }
+    
     @Exported
     public boolean isParticipatingInGame() {
         return !isNotParticipatingInGame;

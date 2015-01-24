@@ -109,6 +109,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if (property != null) {
                 property.setScore(0);
+                property.setScoreHistoryEntries(null);
                 user.save();
             }
         }
