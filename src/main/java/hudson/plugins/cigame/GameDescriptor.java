@@ -23,143 +23,166 @@ import hudson.tasks.Publisher;
 @Extension
 public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
-    public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
-    public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
-    
-    private transient RuleBook rulebook;
-    private boolean namesAreCaseSensitive = true;
-    
-    private int passedTestIncreasingPoints = 1;
-    private int passedTestDecreasingPoints = 0;
-    private int failedTestIncreasingPoints = -1;
-    private int failedTestDecreasingPoints = 0;
-    private int skippedTestIncreasingPoints = 0;
-    private int skippedTestDecreasingPoints = 0;
+  public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
+  public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
 
-    public GameDescriptor() {
-        super(GamePublisher.class);
-        load();
-    }
+  private transient RuleBook rulebook;
+  private boolean namesAreCaseSensitive = true;
 
-    /**
-     * Returns the default rule book
-     * 
-     * @return the rule book that is configured for the game.
-     */
-    public RuleBook getRuleBook() {
-        if (rulebook == null) {
-            rulebook = new RuleBook();
+  private int passedTestIncreasingPoints = 1;
+  private int passedTestDecreasingPoints = 0;
+  private int failedTestIncreasingPoints = -1;
+  private int failedTestDecreasingPoints = 0;
+  private int skippedTestIncreasingPoints = 0;
+  private int skippedTestDecreasingPoints = 0;
 
-            addRuleSetIfAvailable(rulebook, new BuildRuleSet());
-            addRuleSetIfAvailable(rulebook, new UnitTestingRuleSet());
-            addRuleSetIfAvailable(rulebook, new OpenTasksRuleSet());
-            addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
-            addRuleSetIfAvailable(rulebook, new PmdRuleSet());
-            addRuleSetIfAvailable(rulebook, new FindBugsRuleSet());
-            addRuleSetIfAvailable(rulebook, new WarningsRuleSet());
-            addRuleSetIfAvailable(rulebook, new CheckstyleRuleSet());
-        }
-        return rulebook;
-    }
+  private int successfulBuildPoints = 1;
+  private int failedBuildPoints = -10;
 
-    private void addRuleSetIfAvailable(RuleBook book, RuleSet ruleSet) {
-        if (ruleSet.isAvailable()) {
-            book.addRuleSet(ruleSet);
-        }
-    }
+  public GameDescriptor() {
+    super(GamePublisher.class);
+    load();
+  }
 
-    // config page heading
-    @Override
-    public String getDisplayName() {
-        return Messages.Plugin_Title();
-    }
+  /**
+   * Returns the default rule book
+   *
+   * @return the rule book that is configured for the game.
+   */
+  public RuleBook getRuleBook(boolean p_activateBuildPoints, boolean p_activateUnittestPoints) {
+    if (rulebook == null) {
+      // add default-rules 
+      rulebook = new RuleBook();
 
-    // creates a instance with form data; but this only creates empty new object
-    @Override
-    public GamePublisher newInstance(StaplerRequest req, JSONObject formData)
-            throws hudson.model.Descriptor.FormException {
-        return new GamePublisher();
+      addRuleSetIfAvailable(rulebook, new OpenTasksRuleSet());
+      addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
+      addRuleSetIfAvailable(rulebook, new PmdRuleSet());
+      addRuleSetIfAvailable(rulebook, new FindBugsRuleSet());
+      addRuleSetIfAvailable(rulebook, new WarningsRuleSet());
+      addRuleSetIfAvailable(rulebook, new CheckstyleRuleSet());
     }
+    // add Job-specific rules
+    if (p_activateBuildPoints) {
+      addRuleSetIfAvailable(rulebook, new BuildRuleSet(getSuccessfulBuildPoints(), getFailedBuildPoints()), 0);
+    }
+    if (p_activateUnittestPoints) {
+      addRuleSetIfAvailable(rulebook, new UnitTestingRuleSet(), 1);
+    }
+    return rulebook;
+  }
 
-    // invoked when even properties are updated (global properties configured with global.jelly
-    @Override
-    public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
-        req.bindJSON(this, json);
-        save();
-        return true;
+  private void addRuleSetIfAvailable(RuleBook book, RuleSet ruleSet) {
+    if (ruleSet.isAvailable()) {
+      book.addRuleSet(ruleSet);
     }
-    
-    public boolean getNamesAreCaseSensitive() {
-        return namesAreCaseSensitive;
+  }
+  
+  private void addRuleSetIfAvailable(RuleBook book, RuleSet ruleSet, int pos) {
+    if (ruleSet.isAvailable()) {
+      book.addRuleSet(ruleSet, pos);
     }
+  }
 
-    public void setNamesAreCaseSensitive(boolean namesAreCaseSensitive) {
-        this.namesAreCaseSensitive = namesAreCaseSensitive;
-    }
+  // config page heading
+  @Override
+  public String getDisplayName() {
+    return Messages.Plugin_Title();
+  }
 
-    @Override
-    public boolean isApplicable(Class<? extends AbstractProject> arg0) {
-        return true;
-    }
+  @Override
+  public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
+    req.bindJSON(this, json);
+    save();
+    return super.configure(req, json);
+  }
 
-    
-    public int getPassedTestIncreasingPoints() {
-        return passedTestIncreasingPoints;
-    }
+  public boolean getNamesAreCaseSensitive() {
+    return namesAreCaseSensitive;
+  }
 
-    
-    public void setPassedTestIncreasingPoints(int passedTestIncreasingPoints) {
-        this.passedTestIncreasingPoints = passedTestIncreasingPoints;
-    }
+  public void setNamesAreCaseSensitive(boolean namesAreCaseSensitive) {
+    this.namesAreCaseSensitive = namesAreCaseSensitive;
+  }
 
-    
-    public int getPassedTestDecreasingPoints() {
-        return passedTestDecreasingPoints;
-    }
+  @Override
+  public boolean isApplicable(Class<? extends AbstractProject> arg0) {
+    return true;
+  }
 
-    
-    public void setPassedTestDecreasingPoints(int passedTestDecreasingPoints) {
-        this.passedTestDecreasingPoints = passedTestDecreasingPoints;
-    }
+  public int getPassedTestIncreasingPoints() {
+    return passedTestIncreasingPoints;
+  }
 
-    
-    public int getFailedTestIncreasingPoints() {
-        return failedTestIncreasingPoints;
-    }
+  public void setPassedTestIncreasingPoints(int passedTestIncreasingPoints) {
+    this.passedTestIncreasingPoints = passedTestIncreasingPoints;
+  }
 
-    
-    public void setFailedTestIncreasingPoints(int failedTestIncreasingPoints) {
-        this.failedTestIncreasingPoints = failedTestIncreasingPoints;
-    }
+  public int getPassedTestDecreasingPoints() {
+    return passedTestDecreasingPoints;
+  }
 
-    
-    public int getFailedTestDecreasingPoints() {
-        return failedTestDecreasingPoints;
-    }
+  public void setPassedTestDecreasingPoints(int passedTestDecreasingPoints) {
+    this.passedTestDecreasingPoints = passedTestDecreasingPoints;
+  }
 
-    
-    public void setFailedTestDecreasingPoints(int failedTestDecreasingPoints) {
-        this.failedTestDecreasingPoints = failedTestDecreasingPoints;
-    }
+  public int getFailedTestIncreasingPoints() {
+    return failedTestIncreasingPoints;
+  }
 
-    
-    public int getSkippedTestIncreasingPoints() {
-        return skippedTestIncreasingPoints;
-    }
+  public void setFailedTestIncreasingPoints(int failedTestIncreasingPoints) {
+    this.failedTestIncreasingPoints = failedTestIncreasingPoints;
+  }
 
-    
-    public void setSkippedTestIncreasingPoints(int skippedTestIncreasingPoints) {
-        this.skippedTestIncreasingPoints = skippedTestIncreasingPoints;
-    }
+  public int getFailedTestDecreasingPoints() {
+    return failedTestDecreasingPoints;
+  }
 
-    
-    public int getSkippedTestDecreasingPoints() {
-        return skippedTestDecreasingPoints;
-    }
+  public void setFailedTestDecreasingPoints(int failedTestDecreasingPoints) {
+    this.failedTestDecreasingPoints = failedTestDecreasingPoints;
+  }
 
-    
-    public void setSkippedTestDecreasingPoints(int skippedTestDecreasingPoints) {
-        this.skippedTestDecreasingPoints = skippedTestDecreasingPoints;
-    }
+  public int getSkippedTestIncreasingPoints() {
+    return skippedTestIncreasingPoints;
+  }
+
+  public void setSkippedTestIncreasingPoints(int skippedTestIncreasingPoints) {
+    this.skippedTestIncreasingPoints = skippedTestIncreasingPoints;
+  }
+
+  public int getSkippedTestDecreasingPoints() {
+    return skippedTestDecreasingPoints;
+  }
+
+  public void setSkippedTestDecreasingPoints(int skippedTestDecreasingPoints) {
+    this.skippedTestDecreasingPoints = skippedTestDecreasingPoints;
+  }
+
+  /**
+   * @return the successfulBuildPoints
+   */
+  public int getSuccessfulBuildPoints() {
+    return successfulBuildPoints;
+  }
+
+  /**
+   * @param successfulBuildPoints the successfulBuildPoints to set
+   */
+  public void setSuccessfulBuildPoints(int successfulBuildPoints) {
+    this.successfulBuildPoints = successfulBuildPoints;
+  }
+
+  /**
+   * @return the failedBuildPoints
+   */
+  public int getFailedBuildPoints() {
+    return failedBuildPoints;
+  }
+
+  /**
+   * @param failedBuildPoints the failedBuildPoints to set
+   */
+  public void setFailedBuildPoints(int failedBuildPoints) {
+    this.failedBuildPoints = failedBuildPoints;
+  }
 
 }

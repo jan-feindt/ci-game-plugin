@@ -6,8 +6,8 @@ import hudson.plugins.cigame.model.RuleSet;
  * Rule set for common build rules.
  */
 public class BuildRuleSet extends RuleSet {
-    public BuildRuleSet() {
+    public BuildRuleSet(int p_successfulBuildPoints, int p_failedBuildPoints) {
         super(Messages.BuildRuleSet_Title()); //$NON-NLS-1$
-        add(new BuildResultRule());
+        add(new BuildResultRule(p_successfulBuildPoints, p_failedBuildPoints));
     }
 }

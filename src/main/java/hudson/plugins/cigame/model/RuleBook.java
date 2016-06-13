@@ -30,6 +30,16 @@ public class RuleBook {
     public void addRuleSet(RuleSet ruleset) {
         rulesets.add(ruleset);
     }
+    
+    /**
+     * Add rule set to the rule book at position
+     * 
+     * @param pos position
+     * @param ruleset new rule set
+     */
+    public void addRuleSet(RuleSet ruleset, int pos) {
+        rulesets.add(pos, ruleset);
+    }
 
     /**
      * Remove rule set from the rule book
