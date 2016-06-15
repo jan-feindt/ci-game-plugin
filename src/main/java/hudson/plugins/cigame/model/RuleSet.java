@@ -12,6 +12,8 @@ public class RuleSet {
 
     private Collection<Rule> rules;
     private String name;
+    
+    private boolean active = true;
 
     public RuleSet(String name, Collection<Rule> rules) {
         this.name = name;
@@ -69,4 +71,24 @@ public class RuleSet {
     public void removeRule(Rule rule) {
         rules.remove(rule);
     }
+
+    
+    /**
+     * return of Rule is active or not
+     * @return 
+     */
+    public boolean isActive() {
+      return active;
+    }
+    
+    public void activate() {
+     active = true; 
+    }
+    
+    
+    public void deactivate(){
+      active = false;
+    }
+
+
 }

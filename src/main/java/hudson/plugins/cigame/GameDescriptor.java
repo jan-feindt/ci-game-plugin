@@ -26,7 +26,6 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
   public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
   public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
 
-  private transient RuleBook rulebook;
   private boolean namesAreCaseSensitive = true;
 
   private int passedTestIncreasingPoints = 1;
@@ -50,36 +49,36 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
    * @return the rule book that is configured for the game.
    */
   public RuleBook getRuleBook(boolean p_activateBuildPoints, boolean p_activateUnittestPoints) {
-    if (rulebook == null) {
-      // add default-rules 
-      rulebook = new RuleBook();
 
-      addRuleSetIfAvailable(rulebook, new OpenTasksRuleSet());
-      addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
-      addRuleSetIfAvailable(rulebook, new PmdRuleSet());
-      addRuleSetIfAvailable(rulebook, new FindBugsRuleSet());
-      addRuleSetIfAvailable(rulebook, new WarningsRuleSet());
-      addRuleSetIfAvailable(rulebook, new CheckstyleRuleSet());
-    }
+    // add default-rules 
+    RuleBook rulebook = new RuleBook();
+
+    BuildRuleSet buildRuleSet = new BuildRuleSet(getSuccessfulBuildPoints(), getFailedBuildPoints());
     // add Job-specific rules
-    if (p_activateBuildPoints) {
-      addRuleSetIfAvailable(rulebook, new BuildRuleSet(getSuccessfulBuildPoints(), getFailedBuildPoints()), 0);
+    if (!p_activateBuildPoints) {
+      buildRuleSet.deactivate();
     }
-    if (p_activateUnittestPoints) {
-      addRuleSetIfAvailable(rulebook, new UnitTestingRuleSet(), 1);
+    addRuleSetIfAvailable(rulebook, buildRuleSet);
+
+    UnitTestingRuleSet unitTestingRuleSet = new UnitTestingRuleSet();
+    if (!p_activateUnittestPoints) {
+      unitTestingRuleSet.deactivate();
     }
+    addRuleSetIfAvailable(rulebook, unitTestingRuleSet);
+
+    addRuleSetIfAvailable(rulebook, new OpenTasksRuleSet());
+    addRuleSetIfAvailable(rulebook, new ViolationsRuleSet());
+    addRuleSetIfAvailable(rulebook, new PmdRuleSet());
+    addRuleSetIfAvailable(rulebook, new FindBugsRuleSet());
+    addRuleSetIfAvailable(rulebook, new WarningsRuleSet());
+    addRuleSetIfAvailable(rulebook, new CheckstyleRuleSet());
+
     return rulebook;
   }
 
   private void addRuleSetIfAvailable(RuleBook book, RuleSet ruleSet) {
     if (ruleSet.isAvailable()) {
       book.addRuleSet(ruleSet);
-    }
-  }
-  
-  private void addRuleSetIfAvailable(RuleBook book, RuleSet ruleSet, int pos) {
-    if (ruleSet.isAvailable()) {
-      book.addRuleSet(ruleSet, pos);
     }
   }
 
