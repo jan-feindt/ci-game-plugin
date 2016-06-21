@@ -60,7 +60,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
    */
   @Exported
   public List<UserScore> getUserScores() {
-    return getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
+    return getUserScores(User.getAll());
   }
 
   @Exported
@@ -68,23 +68,10 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     return new VersionNumber(Hudson.VERSION).isNewerThan(new VersionNumber("1.433"));
   }
 
-  public List<UserScore> getUserScores(Collection<User> users, boolean usernameIsCaseSensitive) {
+  public List<UserScore> getUserScores(Collection<User> users) {
     List<UserScore> list = new ArrayList<UserScore>();
 
-    Collection<User> players;
-    if (usernameIsCaseSensitive) {
-      players = users;
-    } else {
-      List<User> playerList = new ArrayList<User>();
-      CaseInsensitiveUserIdComparator caseInsensitiveUserIdComparator = new CaseInsensitiveUserIdComparator();
-      for (User user : users) {
-        if (Collections.binarySearch(playerList, user, caseInsensitiveUserIdComparator) < 0) {
-          playerList.add(user);
-        }
-      }
-      players = playerList;
-    }
-
+    Collection<User> players = users;
     for (User user : players) {
       UserScoreProperty property = user.getProperty(UserScoreProperty.class);
       if ((property != null) && property.isParticipatingInGame()) {
@@ -203,7 +190,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     Map<ScoreLevel, List<UserScore>> result = new TreeMap<ScoreLevel, List<UserScore>>(new DescendingScoreLevelComparator());
 
     GameDescriptor gameDescriptor = Hudson.getInstance().getDescriptorByType(GameDescriptor.class);
-    List<UserScore> userScores = getUserScores(User.getAll(), gameDescriptor.getNamesAreCaseSensitive());
+    List<UserScore> userScores = getUserScores(User.getAll());
     List<ScoreLevel> levels = gameDescriptor.getScoreLevels();
 
     for (UserScore userScore : userScores) {

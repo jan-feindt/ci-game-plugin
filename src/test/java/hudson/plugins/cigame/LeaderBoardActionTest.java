@@ -41,9 +41,9 @@ public class LeaderBoardActionTest {
         when(userOne.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(2.0, true, null));
         when(userTwo.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(5.0, true, null));
         
-        List<UserScore> scores = new LeaderBoardAction().getUserScores(Arrays.asList(userOne, userTwo), false);
-        assertThat(scores.size(), is(1));
-        assertThat(scores.get(0).getScore(), is(2d));
+        List<UserScore> scores = new LeaderBoardAction().getUserScores(Arrays.asList(userOne, userTwo));
+        assertThat(scores.size(), is(2));
+        assertThat(scores.get(0).getScore(), is(5d));
     }
     
     @Test
@@ -55,7 +55,7 @@ public class LeaderBoardActionTest {
         when(userOne.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(5.0, true, null));
         when(userTwo.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(2.0, true, null));
         
-        List<UserScore> scores = new LeaderBoardAction().getUserScores(Arrays.asList(userOne, userTwo), true);
+        List<UserScore> scores = new LeaderBoardAction().getUserScores(Arrays.asList(userOne, userTwo));
         assertThat(scores.size(), is(2));
         assertThat(scores.get(0).getScore(), is(5d));
         assertThat(scores.get(1).getScore(), is(2d));
@@ -70,7 +70,7 @@ public class LeaderBoardActionTest {
         when(userOne.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(1.0, true, null));
         when(userTwo.getProperty(UserScoreProperty.class)).thenReturn(new UserScoreProperty(2.0, true, null));
         
-        List<UserScore> scores = new LeaderBoardAction().getUserScores(Arrays.asList(userOne, userTwo), true);
+        List<UserScore> scores = new LeaderBoardAction().getUserScores(Arrays.asList(userOne, userTwo));
         assertThat(scores.size(), is(2));
         assertThat(scores.get(0).getScore(), is(2d));
         assertThat(scores.get(0).getUser().getId(), is("John"));

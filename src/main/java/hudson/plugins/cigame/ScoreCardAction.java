@@ -12,76 +12,75 @@ import org.kohsuke.stapler.export.ExportedBean;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import hudson.model.Hudson;
+import hudson.model.Run;
 import hudson.model.User;
 import hudson.plugins.cigame.model.ScoreCard;
+import hudson.plugins.cigame.model.ScoreHistoryEntry;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.bind.JavaScriptMethod;
 
 /**
  * Score card for a certain build
- * 
+ *
  * @author Erik Ramfelt
  */
 @ExportedBean(defaultVisibility = 999)
 public class ScoreCardAction implements Action {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private AbstractBuild<?, ?> build;
+  private AbstractBuild<?, ?> build;
 
-    private ScoreCard scorecard;
+  private ScoreCard scorecard;
 
-    public ScoreCardAction(ScoreCard scorecard, AbstractBuild<?, ?> b) {
-        build = b;
-        this.scorecard = scorecard;
-    }
+  public ScoreCardAction(ScoreCard scorecard, AbstractBuild<?, ?> b) {
+    build = b;
+    this.scorecard = scorecard;
+  }
 
-    public AbstractBuild<?, ?> getBuild() {
-        return build;
-    }
+  public AbstractBuild<?, ?> getBuild() {
+    return build;
+  }
 
-    public String getDisplayName() {
-        return Messages.Scorecard_Title(); //$NON-NLS-1$
-    }
+  public String getDisplayName() {
+    return Messages.Scorecard_Title(); //$NON-NLS-1$
+  }
 
-    public String getIconFileName() {
-        return GameDescriptor.ACTION_LOGO_SMALL;
-    }
+  public String getIconFileName() {
+    return GameDescriptor.ACTION_LOGO_SMALL;
+  }
 
-    public String getUrlName() {
-        return "cigame"; //$NON-NLS-1$
-    }
+  public String getUrlName() {
+    return "cigame"; //$NON-NLS-1$
+  }
 
-    @Exported
-    public ScoreCard getScorecard() {
-        return scorecard;
-    }
+  @Exported
+  public ScoreCard getScorecard() {
+    return scorecard;
+  }
 
-    @Exported
-    public Collection<User> getParticipants() {
-        return getParticipants(Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
+  @Exported
+  public Collection<User> getParticipants() {
+    List<User> players = new ArrayList<User>(scorecard.getAwardedUsers());
+    if (players.isEmpty()) {
+      scorecard.setUsers(ScoreCard.getUsersFromChanges(build, null));
+      players = new ArrayList<User>(scorecard.getAwardedUsers());
     }
-    
-    Collection<User> getParticipants(boolean usernameIsCasesensitive) {
-        Comparator<User> userIdComparator = new CaseInsensitiveUserIdComparator();
-        List<User> players = new ArrayList<User>();
-        ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
-        for (Entry entry : changeSet) {
-            User user = entry.getAuthor();
-            UserScoreProperty property = user.getProperty(UserScoreProperty.class);
-            if ((property != null) 
-                    && property.isParticipatingInGame() 
-                    && (usernameIsCasesensitive || Collections.binarySearch(players, user, userIdComparator) < 0)) {
-                players.add(user);
-            }
-        }
-        Collections.sort(players, new UserDisplayNameComparator());
-        return players;
+    Collections.sort(players, new UserDisplayNameComparator());
+    return players;
+  }
+
+  private static class UserDisplayNameComparator implements Comparator<User> {
+
+    public int compare(User arg0, User arg1) {
+      return arg0.getDisplayName().compareToIgnoreCase(arg1.getDisplayName());
     }
-    
-    private static class UserDisplayNameComparator implements Comparator<User> {
-        public int compare(User arg0, User arg1) {
-            return arg0.getDisplayName().compareToIgnoreCase(arg1.getDisplayName());
-        }            
-    }
+  }
 }

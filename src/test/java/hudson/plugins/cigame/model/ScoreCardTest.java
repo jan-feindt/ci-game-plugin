@@ -9,6 +9,7 @@ import hudson.model.AbstractBuild;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -26,7 +27,9 @@ public class ScoreCardTest {
         Rule rule = mock(Rule.class);
         when(rule.evaluate(isA(AbstractBuild.class))).thenReturn(RuleResult.EMPTY_RESULT);
         ScoreCard card = new ScoreCard();
-        card.record(mock(AbstractBuild.class), new RuleSet("test", Arrays.asList(new Rule[]{rule})), null);
+      AbstractBuild build = mock(AbstractBuild.class);
+      when(build.getCulprits()).thenReturn(Collections.emptySet());
+        card.record(build, new RuleSet("test", Arrays.asList(new Rule[]{rule})), null);
         assertThat(card.getScores().size(), is(0));
     }
     
@@ -35,13 +38,17 @@ public class ScoreCardTest {
     	List<Rule> liste = new ArrayList<Rule>();
     	liste.add(null);
     	ScoreCard card = new ScoreCard();
-    	card.record(mock(AbstractBuild.class), new RuleSet("test", liste), null);
+      AbstractBuild build = mock(AbstractBuild.class);
+      when(build.getCulprits()).thenReturn(Collections.emptySet());
+    	card.record(build, new RuleSet("test", liste), null);
     }
     
     @Test
     public void assertEmptyRuleBookDoesNotThrowIllegalException() {
         ScoreCard scoreCard = new ScoreCard();
-        scoreCard.record(mock(AbstractBuild.class), new RuleBook(), null);
+        AbstractBuild build = mock(AbstractBuild.class);
+      when(build.getCulprits()).thenReturn(Collections.emptySet());
+        scoreCard.record(build, new RuleBook(), null);
         assertThat(scoreCard.getTotalPoints(), is(0d));
     }
 }

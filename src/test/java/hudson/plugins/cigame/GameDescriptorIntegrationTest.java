@@ -13,27 +13,28 @@ public class GameDescriptorIntegrationTest extends HudsonTestCase {
 
     public void testThatSettingCaseInsensitiveFlagWorks() throws Exception {
         GameDescriptor descriptor = hudson.getDescriptorByType(GameDescriptor.class);
+        assertThat(descriptor.getSuccessfulBuildPoints(), is(1));
         WebClient webClient = new WebClient();
         webClient.setThrowExceptionOnScriptError(false);
         
         HtmlForm form = webClient.goTo("configure").getFormByName("config");
-        assertThat(form.getInputByName("_.namesAreCaseSensitive").isChecked(), is(true));
-        form.getInputByName("_.namesAreCaseSensitive").setChecked(false);
+        assertThat(form.getInputByName("_.successfulBuildPoints").asText(), is("1"));
+        form.getInputByName("_.successfulBuildPoints").setValueAttribute("2");
         form.submit((HtmlButton)last(form.getHtmlElementsByTagName("button")));
-        assertThat(descriptor.getNamesAreCaseSensitive(), is(false));
+        
         
         form = webClient.goTo("configure").getFormByName("config");
-        assertThat(form.getInputByName("_.namesAreCaseSensitive").isChecked(), is(false));
-        form.getInputByName("_.namesAreCaseSensitive").setChecked(true);
+        assertThat(form.getInputByName("_.successfulBuildPoints").asText(), is("2"));
+        form.getInputByName("_.successfulBuildPoints").setValueAttribute("1");
         form.submit((HtmlButton)last(form.getHtmlElementsByTagName("button")));
-        assertThat(descriptor.getNamesAreCaseSensitive(), is(true));
+        
     }
 
     @LocalData
     public void testLoadingCaseInsensitiveFlagWorks() throws Exception {
         GameDescriptor descriptor = hudson.getDescriptorByType(GameDescriptor.class);
-        assertThat(descriptor.getNamesAreCaseSensitive(), is(false));
+        assertThat(descriptor.getSuccessfulBuildPoints(), is(1));
         HtmlForm form = new WebClient().goTo("configure").getFormByName("config");
-        assertThat(form.getInputByName("_.namesAreCaseSensitive").isChecked(), is(false));
+        
     }
 }

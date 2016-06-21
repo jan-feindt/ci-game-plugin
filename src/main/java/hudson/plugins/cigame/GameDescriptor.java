@@ -43,7 +43,6 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
   public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
   public static final String ACTION_LOGO_SMALL = "/plugin/ci-game/icons/24x24/game.png"; //$NON-NLS-1$
   private transient List<ScoreLevel> scoreLevels;
-  private boolean namesAreCaseSensitive = true;
   private int passedTestIncreasingPoints = 1;
   private int passedTestDecreasingPoints = 0;
   private int failedTestIncreasingPoints = -1;
@@ -136,14 +135,6 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
     req.bindJSON(this, json);
     save();
     return super.configure(req, json);
-  }
-
-  public boolean getNamesAreCaseSensitive() {
-    return namesAreCaseSensitive;
-  }
-
-  public void setNamesAreCaseSensitive(boolean namesAreCaseSensitive) {
-    this.namesAreCaseSensitive = namesAreCaseSensitive;
   }
 
   @Override

@@ -24,6 +24,7 @@ import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
+import java.util.HashSet;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 public class GamePublisher extends Notifier {
@@ -59,7 +60,7 @@ public class GamePublisher extends Notifier {
     listener.getLogger().println("Rule Build Points is " + (activateBuildPoints ? "activ" : "not activ"));
     listener.getLogger().println("Unittest Points is " + (activateUnittestPoints ? "activ" : "not activ"));
 
-    perform(build, getDescriptor().getRuleBook(activateBuildPoints, activateUnittestPoints), getDescriptor().getNamesAreCaseSensitive(), listener);
+    perform(build, getDescriptor().getRuleBook(activateBuildPoints, activateUnittestPoints), listener);
 
     return true;
   }
@@ -75,7 +76,7 @@ public class GamePublisher extends Notifier {
    * @return true, if any user scores were updated; false, otherwise
    * @throws IOException thrown if there was a problem setting a user property
    */
-  boolean perform(AbstractBuild<?, ?> build, RuleBook ruleBook, boolean usernameIsCasesensitive, BuildListener listener) throws IOException {
+  boolean perform(AbstractBuild<?, ?> build, RuleBook ruleBook, BuildListener listener) throws IOException {
     ScoreCard sc = new ScoreCard();
     sc.record(build, ruleBook, listener);
 
@@ -108,17 +109,7 @@ public class GamePublisher extends Notifier {
       previousBuild = previousBuild.getPreviousBuild();
     }
 
-    Set<User> players = new TreeSet<User>(usernameIsCasesensitive ? null : new UsernameCaseinsensitiveComparator());
-    for (AbstractBuild<?, ?> b : accountableBuilds) {
-      ChangeLogSet<? extends Entry> changeSet = b.getChangeSet();
-      if (changeSet != null) {
-        for (Entry e : changeSet) {
-          players.add(e.getAuthor());
-        }
-      }
-    }
-
-    return updateUserScores(players, sc.getTotalPoints(), accountableBuilds);
+    return updateUserScores(new HashSet(sc.getAwardedUsers()), sc.getTotalPoints(), accountableBuilds);
   }
 
   private AbstractBuild getBuildByUpstreamCause(List<Cause> causes, BuildListener listener) {

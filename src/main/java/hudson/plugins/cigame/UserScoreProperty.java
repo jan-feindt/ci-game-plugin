@@ -25,7 +25,7 @@ import java.util.List;
 public class UserScoreProperty extends UserProperty {
 
     @VisibleForTesting
-    protected static final int MAX_HISTORY_LENGTH = 10;
+    protected static final int MAX_HISTORY_LENGTH = 50;
 
     private double score;
     private String userId;
@@ -132,6 +132,14 @@ public class UserScoreProperty extends UserProperty {
         return Lists.newLinkedList(this.scoreHistoryEntries);
     }
 
+    @Exported
+    public void doRemoveParticipant(ScoreHistoryEntry p_entry) {
+      if (p_entry != null && this.scoreHistoryEntries != null) {
+        double l_awardedScore = p_entry.getAwardedScore();
+        this.score = this.score - l_awardedScore;
+        this.scoreHistoryEntries.remove(p_entry);
+      }
+    }
 
 
     @Override

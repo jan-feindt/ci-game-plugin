@@ -2,10 +2,6 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson">
     <l:layout title="${%Leaderboard.title}">
-        <!--<l:header>-->
-            <!--<link rel="stylesheet" href="${rootURL}/plugin/ci-game/game.css" type="text/css" media="screen"/>-->
-        <!--</l:header>-->
-
         <st:include page="sidepanel.jelly"/>
         <t:setIconSize/>
         <l:main-panel>
@@ -29,7 +25,7 @@
                         </tr>
                         <tr>
                             <j:forEach var="userScores" items="${it.getUserGroups().values()}">
-                                <td>
+                                <td valign="top">
                                     <table class="pane sortable bigtable">
                                         <tr>
                                             <td class="pane-header" align="left"/>

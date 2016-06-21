@@ -14,7 +14,7 @@ import java.util.List;
 
 public class UserScorePropertyTest {
 
-    public static final int ENTRY_COUNT = 15;
+    public static final int ENTRY_COUNT = UserScoreProperty.MAX_HISTORY_LENGTH;
     UserScoreProperty property = new UserScoreProperty();
 
     List<ScoreHistoryEntry> entries = Lists.newArrayListWithExpectedSize(ENTRY_COUNT);
